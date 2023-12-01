@@ -67,8 +67,9 @@ class module implements \local_oer\modules\module {
             $identifier = identifier::compose('opencast', $instance,
                     'video', 'identifier', $video->identifier);
             $element->set_identifier($identifier);
-            $element->set_origin('opencast');
+            $element->set_origin('opencast', 'origin', 'oermod_opencast');
             $element->set_title($video->title);
+            // TODO: license mapping will be necessary
             $element->set_license(empty($video->license) ? 'unknown' : $video->license);
             // TODO: What other positions are possible in this array? Is the video url always in key 0?
             $element->set_source($video->publications[0]->url);
