@@ -73,6 +73,9 @@ class module implements \local_oer\modules\module {
             $element->set_license(empty($video->license) ? 'unknown' : $video->license);
             // TODO: What other positions are possible in this array? Is the video url always in key 0?
             $element->set_source($video->publications[0]->url);
+            $element->add_information('origin', 'local_oer',
+                    get_string('url', 'moodle'),
+                    $element->get_source());
             $elements->add_element($element);
         }
         return $elements;
