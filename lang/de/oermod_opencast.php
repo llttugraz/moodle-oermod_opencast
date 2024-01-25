@@ -25,7 +25,7 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$string['pluginname'] = 'OER subplugin for loading opencast videos';
-$string['privacy:metadata'] = 'This plugin does not store any personal data.';
+$string['pluginname'] = 'OER Subplugin zum Laden von Opencast Videos';
+$string['privacy:metadata'] = 'Dieses Plugin speichert keine Daten';
 $string['origin'] = 'Opencast';
-$string['series'] = 'Series';
+$string['series'] = 'Serie';

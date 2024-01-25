@@ -25,7 +25,6 @@
 
 namespace oermod_opencast;
 
-use block_opencast\local\apibridge;
 use local_oer\identifier;
 use local_oer\logger;
 use local_oer\modules\elements;
@@ -60,7 +59,7 @@ class module implements \local_oer\modules\module {
         $instance = settings_api::get_apiurl($settings->id);
         $creator = "oermod_opencast\module";
         foreach ($videos as $video) {
-            if ($video->processing_state != 'SUCCEEDED') {
+            if ($video->processing_state != 'SUCCEEDED' || empty($video->publications)) {
                 // Only show working videos.
                 // Possible states: INSTANTIATED, RUNNING, PAUSED, SUCCEEDED, FAILED, SKIPPED, RETRY.
                 continue;
@@ -75,6 +74,9 @@ class module implements \local_oer\modules\module {
             $element->set_license($license);
             // TODO: What other positions are possible in this array? Is the video url always in key 0?
             $element->set_source($video->publications[0]->url);
+            if (!empty($video->series)) {
+                $element->add_information('series', 'oermod_opencast', $video->series);
+            }
             $element->add_information('origin', 'local_oer',
                     get_string('url', 'moodle'),
                     $element->get_source());
@@ -233,13 +235,77 @@ class module implements \local_oer\modules\module {
     }
 
     /**
-     * When an opencast video is released, the video has to be set to be public accessible.
+     * When an opencast video is released, the video has to be set to be publicly accessible.
      * Also, the video should not be deletable for lecturers.
      *
+     * @param element $element
      * @return bool
+     * @throws \dml_exception
+     * @throws \moodle_exception
      */
-    public function set_element_to_release(): bool {
-        // TODO: implement release.
-        return true;
+    public function set_element_to_release(\local_oer\modules\element $element): bool {
+        $decompose = identifier::decompose($element->get_identifier());
+        $settings = settings_api::get_default_ocinstance();
+        $api = new api($settings->id);
+        $response = $api->opencastapi->eventsApi->getAcl($decompose->value);
+        if (empty($response) || $response['code'] != 200 || $response['reason'] != 'OK') {
+            // Webservice call did not succeed.
+            // TODO: maybe this should be retried later? Add an adhoc task for this?
+            return false;
+        }
+        $success = false;
+        $anonymousrole = "ROLE_ANONYMOUS";
+        $update = false;
+        $found = false;
+
+        // All entries have to be returned, else they will be deleted.
+        // Test if anonymous is already in the list, if true, test allow and action.
+        // If false, add it to the list.
+        $aclsettings = $response['body'];
+        foreach ($aclsettings as $key => $role) {
+            switch ($role->role) {
+                case $anonymousrole:
+                    if ($role->action == 'write') {
+                        // Why does the anonymous role has write access? Remove it.
+                        unset($aclsettings[$key]);
+                        $update = true;
+                    } else {
+                        $found = true;
+                        $success = true; // Nothing to do then.
+                    }
+                    break;
+                default:
+                    // We are only interested in the anonymous role.
+            }
+        }
+
+        // If the setting has not been found, add it and trigger update.
+        if (!$found) {
+            $update = true;
+            $acl = new \stdClass();
+            $acl->allow = true;
+            $acl->role = $anonymousrole;
+            $acl->action = "read";
+            $aclsettings[] = $acl;
+        }
+
+        if ($update && !$success) {
+            $updateresponse = $api->opencastapi->eventsApi->updateAcl($decompose->value, $aclsettings);
+            if ($updateresponse['code'] == 204) {
+                // Workflow to republish metadata needs to be triggered.
+                $workflow = $api->opencastapi->workflowsApi->run(
+                        $decompose->value,
+                        'republish-metadata',
+                        [],
+                        false,
+                        false
+                );
+                if ($workflow) {
+                    $success = true;
+                }
+            }
+        }
+        die();
+        return $success;
     }
 }
