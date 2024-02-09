@@ -29,3 +29,6 @@ $string['pluginname'] = 'OER Subplugin zum Laden von Opencast Videos';
 $string['privacy:metadata'] = 'Dieses Plugin speichert keine Daten';
 $string['origin'] = 'Opencast';
 $string['series'] = 'Serie';
+$string['creator'] = 'Ersteller';
+$string['presenter'] = 'Präsentator';
+$string['contributor'] = 'Beitragende';

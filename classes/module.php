@@ -186,6 +186,19 @@ class module implements \local_oer\modules\module {
     }
 
     /**
+     * Return supported roles.
+     *
+     * @return array[]
+     */
+    public function supported_roles(): array {
+        return [
+                ['Creator', 'creator', 'oermod_opencast'],
+                ['Presenter', 'presenter', 'oermod_opencast'],
+                ['Contributor', 'contributor', 'oermod_opencast'],
+        ];
+    }
+
+    /**
      * Map the Moodle licences to its Opencast counterpart.
      *
      * The shortnames of the licenses will be matched, not the visible names.
