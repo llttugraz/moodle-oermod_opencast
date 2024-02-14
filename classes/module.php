@@ -29,6 +29,7 @@ use local_oer\identifier;
 use local_oer\logger;
 use local_oer\modules\elements;
 use local_oer\modules\element;
+use local_oer\modules\person;
 use tool_opencast\local\api;
 use tool_opencast\local\settings_api;
 
@@ -38,6 +39,15 @@ use tool_opencast\local\settings_api;
  * Implements the interface required to be used in local_oer plugin.
  */
 class module implements \local_oer\modules\module {
+    /**
+     * Supported roles from opencast.
+     */
+    const ROLES = [
+            'Creator',
+            'Presenter',
+            'Contributor',
+    ];
+
     /**
      * Load all files from a given course.
      *
@@ -72,6 +82,22 @@ class module implements \local_oer\modules\module {
             $element->set_title($video->title);
             $license = $this->match_licence('opencast', $video->license);
             $element->set_license($license);
+            $rolecreator = new person();
+            $rolecreator->set_role(self::ROLES[0]);
+            $rolecreator->set_fullname($video->creator);
+            $element->add_person($rolecreator);
+            foreach ($video->presenter as $presenter) {
+                $pres = new person();
+                $pres->set_role(self::ROLES[1]);
+                $pres->set_fullname($presenter);
+                $element->add_person($pres);
+            }
+            foreach ($video->contributor as $contributor) {
+                $contrib = new person();
+                $contrib->set_role(self::ROLES[2]);
+                $contrib->set_fullname($contributor);
+                $element->add_person($contrib);
+            }
             // TODO: What other positions are possible in this array? Is the video url always in key 0?
             $element->set_source($video->publications[0]->url);
             if (!empty($video->series)) {
@@ -192,9 +218,9 @@ class module implements \local_oer\modules\module {
      */
     public function supported_roles(): array {
         return [
-                ['Creator', 'creator', 'oermod_opencast'],
-                ['Presenter', 'presenter', 'oermod_opencast'],
-                ['Contributor', 'contributor', 'oermod_opencast'],
+                [self::ROLES[0], 'creator', 'oermod_opencast'],
+                [self::ROLES[1], 'presenter', 'oermod_opencast'],
+                [self::ROLES[2], 'contributor', 'oermod_opencast'],
         ];
     }
 
