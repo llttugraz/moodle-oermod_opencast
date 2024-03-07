@@ -344,7 +344,6 @@ class module implements \local_oer\modules\module {
                 }
             }
         }
-        die();
         return $success;
     }
 }
