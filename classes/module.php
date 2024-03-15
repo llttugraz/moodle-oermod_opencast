@@ -99,6 +99,12 @@ class module implements \local_oer\modules\module {
                 $contrib->set_fullname($contributor);
                 $element->add_person($contrib);
             }
+            if (!empty($video->rightsholder)) {
+                $rolerightsholder = new person();
+                $rolerightsholder->set_role(self::ROLES[3]);
+                $rolerightsholder->set_fullname($video->rightsholder);
+                $element->add_person($rolerightsholder);
+            }
             // TODO: What other positions are possible in this array? Is the video url always in key 0?
             $element->set_source($video->publications[0]->url);
             if (!empty($video->series)) {
