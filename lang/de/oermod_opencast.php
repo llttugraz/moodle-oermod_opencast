@@ -32,3 +32,4 @@ $string['series'] = 'Serie';
 $string['creator'] = 'Ersteller';
 $string['presenter'] = 'Präsentator';
 $string['contributor'] = 'Beitragende';
+$string['rightsholder'] = 'Rechteinhaber';

@@ -46,6 +46,7 @@ class module implements \local_oer\modules\module {
             'Creator',
             'Presenter',
             'Contributor',
+            'Rightsholder',
     ];
 
     /**
@@ -221,6 +222,7 @@ class module implements \local_oer\modules\module {
                 [self::ROLES[0], 'creator', 'oermod_opencast'],
                 [self::ROLES[1], 'presenter', 'oermod_opencast'],
                 [self::ROLES[2], 'contributor', 'oermod_opencast'],
+                [self::ROLES[3], 'rightsholder', 'oermod_opencast', self::ROLE_REQUIRED],
         ];
     }
 
