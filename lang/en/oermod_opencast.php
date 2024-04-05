@@ -33,3 +33,9 @@ $string['creator'] = 'Creator';
 $string['presenter'] = 'Presenter';
 $string['contributor'] = 'Contributor';
 $string['rightsholder'] = 'Rightsholder';
+$string['addpeoplesetting'] = 'Add people to OER element';
+$string['addpeoplesetting_description'] = 'Add the people and their roles automatically to the OER element ' .
+        'when loading the videos from opencast. People will only be added when the element metadata has not been edited and ' .
+        'stored. More people can be added manually and also the automatically added people can be removed. <br>' .
+        'Following roles will be added:  Presenter, Contributor, Rightsholder.';
+$string['duration'] = 'Duration';

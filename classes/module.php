@@ -43,7 +43,7 @@ class module implements \local_oer\modules\module {
      * Supported roles from opencast.
      */
     const ROLES = [
-            'Creator',
+        // Creator, not interesting for OER.
             'Presenter',
             'Contributor',
             'Rightsholder',
@@ -66,6 +66,7 @@ class module implements \local_oer\modules\module {
         if (empty($videos)) {
             return $elements;
         }
+        $addpeople = get_config('oermod_opencast', 'addpeopleandroles');
 
         $instance = settings_api::get_apiurl($settings->id);
         $creator = "oermod_opencast\module";
@@ -83,36 +84,50 @@ class module implements \local_oer\modules\module {
             $element->set_title($video->title);
             $license = $this->match_licence('opencast', $video->license);
             $element->set_license($license);
-            $rolecreator = new person();
-            $rolecreator->set_role(self::ROLES[0]);
-            $rolecreator->set_fullname($video->creator);
-            $element->add_person($rolecreator);
-            foreach ($video->presenter as $presenter) {
-                $pres = new person();
-                $pres->set_role(self::ROLES[1]);
-                $pres->set_fullname($presenter);
-                $element->add_person($pres);
+            if ($addpeople) {
+                foreach ($video->presenter as $presenter) {
+                    $pres = new person();
+                    $pres->set_role(self::ROLES[1]);
+                    $pres->set_fullname($presenter);
+                    $element->add_person($pres);
+                }
+                foreach ($video->contributor as $contributor) {
+                    $contrib = new person();
+                    $contrib->set_role(self::ROLES[2]);
+                    $contrib->set_fullname($contributor);
+                    $element->add_person($contrib);
+                }
+                if (!empty($video->rightsholder)) {
+                    $rolerightsholder = new person();
+                    $rolerightsholder->set_role(self::ROLES[3]);
+                    $rolerightsholder->set_fullname($video->rightsholder);
+                    $element->add_person($rolerightsholder);
+                }
             }
-            foreach ($video->contributor as $contributor) {
-                $contrib = new person();
-                $contrib->set_role(self::ROLES[2]);
-                $contrib->set_fullname($contributor);
-                $element->add_person($contrib);
-            }
-            if (!empty($video->rightsholder)) {
-                $rolerightsholder = new person();
-                $rolerightsholder->set_role(self::ROLES[3]);
-                $rolerightsholder->set_fullname($video->rightsholder);
-                $element->add_person($rolerightsholder);
-            }
-            // TODO: What other positions are possible in this array? Is the video url always in key 0?
+
             $element->set_source($video->publications[0]->url);
             if (!empty($video->series)) {
-                $element->add_information('series', 'oermod_opencast', $video->series);
+                $element->add_information('series', 'oermod_opencast', $video->series, null, '');
             }
             $element->add_information('origin', 'local_oer',
-                    get_string('url', 'moodle'),
+                    get_string('url', 'moodle'), null, '',
                     $element->get_source());
+
+            if (isset($video->publications[0]->media)) {
+                $durations = [];
+                foreach ($video->publications[0]->media as $media) {
+                    $durations[$media->duration] = isset($durations[$media->duration]) ? $durations[$media->duration]++ : 0;
+                }
+                $milliseconds = array_keys($durations, max($durations));
+                $milliseconds = reset($milliseconds);
+                $duration = $milliseconds / 1000;
+                $minutes = floor($duration / 60);
+                $seconds = $duration % 60;
+                $result = $minutes > 0 ? $minutes . 'min' : '';
+                $result .= $minutes > 0 && $seconds > 0 ? ' ' : '';
+                $result .= $seconds > 0 ? $seconds . 's' : '';
+                $element->add_information('duration', 'oermod_opencast', $result, 'duration', $milliseconds);
+            }
             $elements->add_element($element);
         }
         return $elements;
@@ -225,10 +240,9 @@ class module implements \local_oer\modules\module {
      */
     public function supported_roles(): array {
         return [
-                [self::ROLES[0], 'creator', 'oermod_opencast'],
-                [self::ROLES[1], 'presenter', 'oermod_opencast'],
-                [self::ROLES[2], 'contributor', 'oermod_opencast'],
-                [self::ROLES[3], 'rightsholder', 'oermod_opencast', self::ROLE_REQUIRED],
+                [self::ROLES[0], 'presenter', 'oermod_opencast'],
+                [self::ROLES[1], 'contributor', 'oermod_opencast'],
+                [self::ROLES[2], 'rightsholder', 'oermod_opencast', self::ROLE_REQUIRED],
         ];
     }
 
@@ -260,8 +274,8 @@ class module implements \local_oer\modules\module {
     /**
      * Match a given licence to its counterpart.
      *
-     * @param string $source Source can be either 'moodle' or 'opencast'.
-     * @param string $licence License shortname string.
+     * @param string $source The source can be either 'moodle' or 'opencast'.
+     * @param string $licence Licence shortname string.
      * @return string
      * @throws \coding_exception
      */
