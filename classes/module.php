@@ -312,6 +312,11 @@ class module implements \local_oer\modules\module {
         if (empty($response) || $response['code'] != 200 || $response['reason'] != 'OK') {
             // Webservice call did not succeed.
             // TODO: maybe this should be retried later? Add an adhoc task for this?
+            global $DB;
+            $courseid = $DB->get_field('local_oer_snapshot', 'courseid', ['identifier' => $element->get_identifier()]);
+            logger::add($courseid, logger::LOGERROR,
+                    'Could not set element to release: ' . $element->get_identifier(),
+                    'oermod_opencast');
             return false;
         }
         $success = false;
