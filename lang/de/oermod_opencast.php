@@ -25,17 +25,17 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$string['pluginname'] = 'OER Subplugin zum Laden von Opencast Videos';
-$string['privacy:metadata'] = 'Dieses Plugin speichert keine Daten';
-$string['origin'] = 'Opencast';
-$string['series'] = 'Serie';
-$string['creator'] = 'Ersteller:in';
-$string['presenter'] = 'Präsentator:in';
-$string['contributor'] = 'Beitragende:r';
-$string['rightsholder'] = 'Rechteinhaber:in';
 $string['addpeoplesetting'] = 'Personen zum OER-Element hinzufügen';
 $string['addpeoplesetting_description'] = 'Fügen Sie die Personen und ihre Rollen automatisch zum OER-Element hinzu, ' .
         'wenn Sie die Videos aus opencast laden. People will only be added when the element metadata has not been edited ' .
         'and stored. More people can be added manually and also the automatically added people can be removed.' .
         'Die folgenden Rollen werden hinzugefügt: Präsentator:in, Beitragende:r, Rechteinhaber:in.';
+$string['contributor'] = 'Beitragende:r';
+$string['creator'] = 'Ersteller:in';
 $string['duration'] = 'Dauer';
+$string['origin'] = 'Opencast';
+$string['pluginname'] = 'OER Subplugin zum Laden von Opencast Videos';
+$string['presenter'] = 'Präsentator:in';
+$string['privacy:metadata'] = 'Dieses Plugin speichert keine Daten';
+$string['rightsholder'] = 'Rechteinhaber:in';
+$string['series'] = 'Serie';

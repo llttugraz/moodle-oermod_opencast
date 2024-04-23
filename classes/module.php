@@ -58,7 +58,7 @@ class module implements \local_oer\modules\module {
      * @throws \moodle_exception
      */
     public function load_elements(int $courseid): \local_oer\modules\elements {
-        // TODO: Implement behaviour for multiple instances.
+        // MDL-0 TODO: Implement behaviour for multiple instances.
         // This will also affect the write back function.
         $settings = settings_api::get_default_ocinstance();
         $videos = $this->load_videos($courseid, $settings->id);
@@ -215,6 +215,14 @@ class module implements \local_oer\modules\module {
         $type = 'dublincore/episode';
 
         $response = $api->opencastapi->eventsApi->updateMetadata($decompose->value, $type, $metadata);
+        $success = $this->republish_metadata($api, $decompose->value, $response['code']);
+        if (!$success) {
+            global $DB;
+            $courseid = $DB->get_field('local_oer_elements', 'courseid', ['identifier' => $element->get_identifier()]);
+            logger::add($courseid, logger::LOGERROR,
+                    'Workflow could not be started, so license not visible: ' . $element->get_identifier(),
+                    'oermod_opencast');
+        }
     }
 
     /**
@@ -311,7 +319,7 @@ class module implements \local_oer\modules\module {
         $response = $api->opencastapi->eventsApi->getAcl($decompose->value);
         if (empty($response) || $response['code'] != 200 || $response['reason'] != 'OK') {
             // Webservice call did not succeed.
-            // TODO: maybe this should be retried later? Add an adhoc task for this?
+            // MDL-0 TODO: maybe this should be retried later? Add an adhoc task for this?
             global $DB;
             $courseid = $DB->get_field('local_oer_snapshot', 'courseid', ['identifier' => $element->get_identifier()]);
             logger::add($courseid, logger::LOGERROR,
@@ -356,21 +364,36 @@ class module implements \local_oer\modules\module {
         }
 
         if ($update && !$success) {
-            $updateresponse = $api->opencastapi->eventsApi->updateAcl($decompose->value, $aclsettings);
-            if ($updateresponse['code'] == 204) {
-                // Workflow to republish metadata needs to be triggered.
-                $workflow = $api->opencastapi->workflowsApi->run(
-                        $decompose->value,
-                        'republish-metadata',
-                        [],
-                        false,
-                        false
-                );
-                if ($workflow) {
-                    $success = true;
-                }
-            }
+            $response = $api->opencastapi->eventsApi->updateAcl($decompose->value, $aclsettings);
+            $success = $this->republish_metadata($api, $decompose->value, $response['code']);
+
         }
         return $success;
+    }
+
+    /**
+     * After something has been written back to opencast, the video has to run a workflow so that the changes are visible.
+     *
+     * @param api $api tool_opencast api
+     * @param string $videoid Opencast video id
+     * @param int $code Http response code
+     * @return bool
+     */
+    private function republish_metadata(api $api, string $videoid, int $code) {
+        if ($code == 204) {
+            // Workflow to republish metadata needs to be triggered.
+            $workflow = $api->opencastapi->workflowsApi->run(
+                    $videoid,
+                    'republish-metadata',
+                    [],
+                    false,
+                    false
+            );
+            if ($workflow) {
+                return true;
+            }
+        }
+        return false;
+
     }
 }
