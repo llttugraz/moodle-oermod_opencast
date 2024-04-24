@@ -248,9 +248,9 @@ class module implements \local_oer\modules\module {
      */
     public function supported_roles(): array {
         return [
+                [self::ROLES[2], 'rightsholder', 'oermod_opencast', self::ROLE_REQUIRED],
                 [self::ROLES[0], 'presenter', 'oermod_opencast'],
                 [self::ROLES[1], 'contributor', 'oermod_opencast'],
-                [self::ROLES[2], 'rightsholder', 'oermod_opencast', self::ROLE_REQUIRED],
         ];
     }
 
