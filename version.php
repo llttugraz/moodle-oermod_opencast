@@ -28,7 +28,7 @@ defined('MOODLE_INTERNAL') || die();
 $plugin->version = 2023112900;
 $plugin->requires = 2022112806;
 $plugin->component = 'oermod_opencast';
-$plugin->release = 'v1.0.1-RC1';
+$plugin->release = 'v1.0.1';
 $plugin->dependencies = [
         'local_oer' => 2023111701, // Older versions do not have mod subplugin support.
         'tool_opencast' => 2023112200, // Needed for API access.
