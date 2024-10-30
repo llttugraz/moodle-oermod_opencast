@@ -34,3 +34,4 @@ $plugin->dependencies = [
         'tool_opencast' => 2023112200, // Needed for API access.
         'block_opencast' => 2023112200, // Needed for series id.
 ];
+$plugin->supported = [401, 405];
