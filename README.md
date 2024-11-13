@@ -1,15 +1,63 @@
-# moodle-oermod_opencast
+### moodle-oermod_opencast
 
-Subplugin for [local_oer](https://github.com/llttugraz/moodle-local_oer) plugin
+Subplugin for [local_oer](https://github.com/llttugraz/moodle-local_oer) plugin.<br>
+This subplugin loads video metadata from opencast to 
+be released as OER resource (Open Educational Resources).
 
-# Requirements
 
-* Moodle 4.1+
-* [local_oer](https://github.com/llttugraz/moodle-local_oer) v2.3.0+
-* [tool_opencast](https://moodle.org/plugins/tool_opencast) v4.3-r1+
-* [block_opencast](https://moodle.org/plugins/block_opencast) v4.3-r1+
+## Table of Contents
 
-# Content
+
+- [Installation](#installation)
+- [Requirements](#requirements)
+- [Features](#features)
+- [Configuration](#configuration)
+- [Usage](#usage)
+- [Dependencies](#dependencies)
+- [API Documentation](#api-documentation)
+- [Subplugins](#subplugins)
+- [Privacy](#privacy)
+- [Known Issues](#known-issues)
+- [License](#license)
+- [Contributors](#contributors)
+
+## Installation
+
+There are 3 options on how to install this subplugin.
+
+1. Download the subplugin and extract the files.
+2. Move the extracted folder to your `moodle/local/oer/modules` directory.
+3. Log in as an admin in Moodle and navigate to `Site Administration` or `Dashboard`.
+4. Follow the on-screen instructions to complete the installation.
+
+or
+
+1. Download the subplugin.
+2. Log in as admin in Moodle and navigate to `Site Administration > Plugins > Install plugins`.
+3. Add zip directory to drag and drop field.
+4. Follow the on-screen instructions to complete the installation.
+
+or
+
+1. Open `.../moodle/local/oer/modules` in a terminal.
+2. Add this subplugin in terminal with `git clone <ssh link> <folder name>`.
+3. Log in as admin and navigate to `Site Administration` or `Dashboard`.
+4. Follow the on-screen instructions to complete the installation.
+
+with the third option there are also the git functions available.
+
+
+## Requirements
+
+- Supported Moodle Version: 4.1 - 4.5
+- Supported PHP Version:    7.4 - 8.3
+- Supported Databases:      MariaDB, PostgreSQL
+- Supported Moodle Themes:  Boost
+
+This plugin has only been tested under the above system requirements against the specified versions.
+However, it may work under other system requirements and versions as well.
+
+## Features
 
 This plugin loads video metadata from opencast to 
 be released as OER resource (Open Educational Resources).
@@ -18,12 +66,54 @@ to Moodle courses and the API from tool_opencast to load the video metadata.
 
 When a video is set to OER it also stores changes in metadata back to the video (license).
 
-## On OER release
+### On OER release
 
 The released videos remain in Opencast and the link is provided in the release metadata.
 The video will be set to public.
 
-## TODOs / Known issues
+## Configuration
+
+The following setting is available (by default enabled):
+
+- Add the people and their roles automatically to the OER element when loading the videos from opencast. People will only be added when the element metadata has not been edited and stored. More people can be added manually and also the automatically added people can be removed.
+Following roles will be added: Presenter, Contributor, Rightsholder.
+
+## Usage
+
+See description of main plugin [local_oer](https://github.com/llttugraz/moodle-local_oer).
+
+## Dependencies
+
+* [local_oer](https://github.com/llttugraz/moodle-local_oer) v2.3.0+
+* [tool_opencast](https://moodle.org/plugins/tool_opencast) v4.3-r1+
+* [block_opencast](https://moodle.org/plugins/block_opencast) v4.3-r1+
+
+## API Documentation
+
+No API.
+
+## Subplugins
+
+No subplugins.
+
+## Privacy
+
+No personal data are stored.
+
+## Known Issues
 
 * Deleting of videos cannot be prevented yet.
 * Support for multiple OpenCast instances, connected to one Moodle, has to be added
+* Unit tests for `class module`have to be added
+
+## Accessibility Status
+
+No accessibility status yet. TODO.
+
+## License
+
+This plugin is licensed under the [GNU GPL v3](http://www.gnu.org/licenses).
+
+## Contributors
+
+- **Ortner, Christian** - Developer - [GitHub](https://github.com/chriso123)
