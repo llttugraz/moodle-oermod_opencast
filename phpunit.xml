@@ -18,7 +18,7 @@
         beStrictAboutOutputDuringTests="true"
 >
     <testsuites>
-        <testsuite name="oermod_folder">
+        <testsuite name="oermod_opencast">
             <directory suffix="_test.php">tests</directory>
         </testsuite>
     </testsuites>
