@@ -1,7 +1,7 @@
 ### moodle-oermod_opencast
 
 Subplugin for [local_oer](https://github.com/llttugraz/moodle-local_oer) plugin.<br>
-This subplugin loads video metadata from opencast to 
+This subplugin loads video metadata from [Opencast](https://opencast.org/) to 
 be released as OER resource (Open Educational Resources).
 
 
@@ -59,10 +59,8 @@ However, it may work under other system requirements and versions as well.
 
 ## Features
 
-This plugin loads video metadata from opencast to 
-be released as OER resource (Open Educational Resources).
-It uses block_opencast to get the series attached 
-to Moodle courses and the API from tool_opencast to load the video metadata.
+This plugin loads video metadata from [Opencast](https://opencast.org/) to be released as OER resource (Open Educational Resources).
+It uses block_opencast to get the series attached to Moodle courses and the API from tool_opencast to load the video metadata.
 
 When a video is set to OER it also stores changes in metadata back to the video (license).
 
@@ -75,7 +73,7 @@ The video will be set to public.
 
 The following setting is available (by default enabled):
 
-- Add the people and their roles automatically to the OER element when loading the videos from opencast. People will only be added when the element metadata has not been edited and stored. More people can be added manually and also the automatically added people can be removed.
+- Add the users and their roles automatically to the OER element when loading the videos from opencast. Users will only be added when the element metadata has not been edited and stored. More users can be added manually and also the automatically added people can be removed.
 Following roles will be added: Presenter, Contributor, Rightsholder.
 
 ## Usage
@@ -103,8 +101,8 @@ No personal data are stored.
 ## Known Issues
 
 * Deleting of videos cannot be prevented yet.
-* Support for multiple OpenCast instances, connected to one Moodle, has to be added
-* Unit tests for `class module`have to be added
+* Support for multiple Opencast instances, connected to one Moodle instance, has to been implemented yet.
+* Unit tests for `class module` have not been implemented yet.
 
 ## Accessibility Status
 
@@ -112,7 +110,7 @@ No accessibility status yet. TODO.
 
 ## License
 
-This plugin is licensed under the [GNU GPL v3](http://www.gnu.org/licenses).
+This plugin is licensed under the [GNU GPL v3](https://www.gnu.org/licenses/gpl-3.0.html).
 
 ## Contributors
 
