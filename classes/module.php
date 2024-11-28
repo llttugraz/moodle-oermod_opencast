@@ -58,7 +58,7 @@ class module implements \local_oer\modules\module {
      * @throws \moodle_exception
      */
     public function load_elements(int $courseid): \local_oer\modules\elements {
-        // MDL-0 TODO: Implement behaviour for multiple instances.
+        // TODO: Implement behaviour for multiple instances.
         // This will also affect the write back function.
         $settings = settings_api::get_default_ocinstance();
         $videos = $this->load_videos($courseid, $settings->id);
@@ -317,11 +317,11 @@ class module implements \local_oer\modules\module {
         $settings = settings_api::get_default_ocinstance();
         $api = new api($settings->id);
         $response = $api->opencastapi->eventsApi->getAcl($decompose->value);
+        global $DB;
+        $courseid = $DB->get_field('local_oer_snapshot', 'courseid', ['identifier' => $element->get_identifier()]);
         if (empty($response) || $response['code'] != 200 || $response['reason'] != 'OK') {
             // Webservice call did not succeed.
-            // MDL-0 TODO: maybe this should be retried later? Add an adhoc task for this?
-            global $DB;
-            $courseid = $DB->get_field('local_oer_snapshot', 'courseid', ['identifier' => $element->get_identifier()]);
+            // TODO: maybe this should be retried later? Add an adhoc task for this?
             logger::add($courseid, logger::LOGERROR,
                     'Could not set element to release: ' . $element->get_identifier(),
                     'oermod_opencast');
@@ -335,21 +335,24 @@ class module implements \local_oer\modules\module {
         // All entries have to be returned, else they will be deleted.
         // Test if anonymous is already in the list, if true, test allow and action.
         // If false, add it to the list.
+        $removewrite = get_config('oermod_opencast', 'rolestoremovewrite');
+        $removewrite = str_replace('{{courseid}}', $courseid, $removewrite);
+        $list = explode("\r\n", $removewrite);
         $aclsettings = $response['body'];
         foreach ($aclsettings as $key => $role) {
             switch ($role->role) {
                 case $anonymousrole:
-                    if ($role->action == 'write') {
-                        // Why does the anonymous role has write access? Remove it.
-                        unset($aclsettings[$key]);
-                        $update = true;
-                    } else {
+                    $result = $this->remove_write_permission($role, $key, $aclsettings);
+                    $update = $update ?: $result;
+                    if (!$update) {
                         $found = true;
-                        $success = true; // Nothing to do then.
                     }
                     break;
                 default:
-                    // We are only interested in the anonymous role.
+            }
+            if (in_array($role->role, $list)) {
+                $result = $this->remove_write_permission($role, $key, $aclsettings);
+                $update = $update ?: $result;
             }
         }
 
@@ -363,12 +366,27 @@ class module implements \local_oer\modules\module {
             $aclsettings[] = $acl;
         }
 
-        if ($update && !$success) {
+        if ($update) {
             $response = $api->opencastapi->eventsApi->updateAcl($decompose->value, $aclsettings);
             $success = $this->republish_metadata($api, $decompose->value, $response['code']);
-
         }
         return $success;
+    }
+
+    /**
+     * Remove the write flag from an ACL role.
+     *
+     * @param \stdClass $role
+     * @param string $key
+     * @param array $aclsettings
+     * @return bool
+     */
+    private function remove_write_permission(\stdClass $role, string $key, array &$aclsettings): bool {
+        if ($role->action == 'write') {
+            $aclsettings[$key]->allow = false;
+            return true;
+        }
+        return false;
     }
 
     /**

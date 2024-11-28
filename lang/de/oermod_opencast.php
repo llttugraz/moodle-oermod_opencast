@@ -38,4 +38,12 @@ $string['pluginname'] = 'OER Subplugin zum Laden von Opencast Videos';
 $string['presenter'] = 'Präsentator:in';
 $string['privacy:metadata'] = 'Dieses Plugin speichert keine Daten';
 $string['rightsholder'] = 'Rechteinhaber:in';
+$string['rolestoremovewrite'] = 'Rollen, von denen Schreibrechte entfernt werden';
+$string['rolestoremovewrite_description'] = 'Opencast-Rollen, bei denen die Schreibrechte ' .
+        'nach Freigabe eines OER-Objekts entfernt werden. Dadurch wird verhindert, ' .
+        'dass das Video in Opencast verändert oder gelöscht wird. Eine Rolle pro Zeile. ' .
+        'Der Platzhalter {{courseid}} kann verwendet werden.' .
+        '<p><strong>Wichtig:</strong>Damit dies funktioniert, müssen Opencast-Workflows auf ' .
+        'Rollen beschränkt werden, und der Opencast-Admin-Benutzer, der in tool_opencast festgelegt ist, ' .
+        'darf keinen Schreibzugriff auf die Standard-Admin-Rolle in Opencast haben (Standardname: ROLE_ADMIN)</p>';
 $string['series'] = 'Serie';
