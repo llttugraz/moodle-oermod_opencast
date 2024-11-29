@@ -29,7 +29,7 @@ import * as Templates from "core/templates";
  * @param {{series: id, videos: {videoid, title}}}released
  * @returns {Promise<void>}
  */
-export const init = async (released) => {
+export const init = async(released) => {
     const series = released.series;
     const videos = released.videos;
 
@@ -40,7 +40,7 @@ export const init = async (released) => {
             let content = cell.innerHTML;
             for (const key in videos) {
                 if (content.includes(videos[key].videoid)) {
-                    const {html,} = await Templates.renderForPromise('oermod_opencast/info', {identifier: videos[key].videoid});
+                    const {html,} = await Templates.renderForPromise('oermod_opencast/info', {});
                     cell.innerHTML = html;
                 }
             }

@@ -23,6 +23,16 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+/**
+ * Inject javascript to the block_opencast overview.
+ *
+ * When Opencast Videos are released as OER they should not be deletable in the "normal" way.
+ * So this JavaScript replaces the delete and edit button with information on how to delete a video.
+ *
+ * @return void
+ * @throws coding_exception
+ * @throws dml_exception
+ */
 function oermod_opencast_before_footer() {
     global $PAGE;
     if ($PAGE->has_set_url() && preg_match('/\/blocks\/opencast\/index.php/', $PAGE->url->out())) {
