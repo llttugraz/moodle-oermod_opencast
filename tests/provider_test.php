@@ -15,24 +15,32 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * OER subplugin for loading opencast videos
+ * Graz University of Technology specific subplugin for Open Educational Resources Plugin.
  *
  * @package    oermod_opencast
- * @author     Christian Ortner <christian.ortner@tugraz.at>
- * @copyright  2023 Educational Technologies, Graz, University of Technology
+ * @author     Gerhard Unger <gerhard.unger@tugraz.at>
+ * @copyright  2024 Educational Technologies, Graz, University of Technology
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-defined('MOODLE_INTERNAL') || die();
+namespace oermod_opencast;
 
-$plugin->version = 2024112800;
-$plugin->requires = 2022112806;
-$plugin->component = 'oermod_opencast';
-$plugin->release = 'v1.0.3';
-$plugin->maturity = MATURITY_STABLE;
-$plugin->dependencies = [
-        'local_oer' => 2023111701, // Older versions do not have mod subplugin support.
-        'tool_opencast' => 2023112200, // Needed for API access.
-        'block_opencast' => 2023112200, // Needed for series id.
-];
-$plugin->supported = [401, 405];
+use oermod_opencast\privacy\provider;
+
+/**
+ * Class provider_test
+ *
+ * @coversDefaultClass \oermod_opencast\privacy\provider
+ */
+final class provider_test extends \advanced_testcase {
+    /**
+     * Test string of language identifier.
+     *
+     * @return void
+     * @covers ::get_reason
+     */
+    public function test_get_reason(): void {
+        $this->resetAfterTest();
+        $this->assertEquals('privacy:metadata', provider::get_reason());
+    }
+}

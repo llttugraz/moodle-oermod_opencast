@@ -118,15 +118,17 @@ class module implements \local_oer\modules\module {
                 foreach ($video->publications[0]->media as $media) {
                     $durations[$media->duration] = isset($durations[$media->duration]) ? $durations[$media->duration]++ : 0;
                 }
-                $milliseconds = array_keys($durations, max($durations));
+                $milliseconds = empty($durations) ? [0 => 0] : array_keys($durations, max($durations));
                 $milliseconds = reset($milliseconds);
                 $duration = $milliseconds / 1000;
                 $minutes = floor($duration / 60);
-                $seconds = $duration % 60;
+                $seconds = (int) $duration % 60;
                 $result = $minutes > 0 ? $minutes . 'min' : '';
                 $result .= $minutes > 0 && $seconds > 0 ? ' ' : '';
                 $result .= $seconds > 0 ? $seconds . 's' : '';
-                $element->add_information('duration', 'oermod_opencast', $result, 'duration', $milliseconds);
+                if (!empty($result)) { // Not every video has set correct length.
+                    $element->add_information('duration', 'oermod_opencast', $result, 'duration', $milliseconds);
+                }
             }
             $elements->add_element($element);
         }
@@ -248,9 +250,9 @@ class module implements \local_oer\modules\module {
      */
     public function supported_roles(): array {
         return [
+                [self::ROLES[2], 'rightsholder', 'oermod_opencast', self::ROLE_REQUIRED],
                 [self::ROLES[0], 'presenter', 'oermod_opencast'],
                 [self::ROLES[1], 'contributor', 'oermod_opencast'],
-                [self::ROLES[2], 'rightsholder', 'oermod_opencast', self::ROLE_REQUIRED],
         ];
     }
 
