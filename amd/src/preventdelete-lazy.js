@@ -29,7 +29,7 @@ import * as Templates from "core/templates";
  * @param {{series: id, videos: {videoid, title}}}released
  * @returns {Promise<void>}
  */
-export const init = async(released) => {
+export const init = async (released) => {
     const series = released.series;
     const videos = released.videos;
 
@@ -37,9 +37,11 @@ export const init = async(released) => {
         let table = document.getElementById('opencast-videos-table-' + series[key]);
         for (let i = 0; i < table.tBodies[0].rows.length; i++) {
             let cell = document.getElementById('opencast-videos-table-' + series[key] + '_r' + i + '_c6');
+            let visibility = document.getElementById('opencast-videos-table-' + series[key] + '_r' + i + '_c5');
             let content = cell.innerHTML;
             for (const key in videos) {
                 if (content.includes(videos[key].videoid)) {
+                    visibility.innerHTML = '-';
                     const {html,} = await Templates.renderForPromise('oermod_opencast/info', {});
                     cell.innerHTML = html;
                 }
