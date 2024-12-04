@@ -37,5 +37,16 @@ $string['origin'] = 'Opencast';
 $string['pluginname'] = 'OER subplugin for loading opencast videos';
 $string['presenter'] = 'Presenter';
 $string['privacy:metadata'] = 'This plugin does not store any personal data.';
+$string['releasedvideo'] = '<p>This video has been published as an <strong>Open Educational Resource (OER)</strong>.</p>' .
+        '<p>It is no longer possible to edit the metadata of the video or to delete the video through this interface.<br>' .
+        'If you want to to delete the video, please contact support.</p>';
 $string['rightsholder'] = 'Rightsholder';
+$string['rolestoremovewrite'] = 'Roles from which write access is removed';
+$string['rolestoremovewrite_description'] = 'Opencast roles, where the write privileges will be ' .
+        'removed after an OER object is released. ' .
+        'This will prevent, that the video in Opencast is altered, or deleted. Enter one role per line. ' .
+        'Placeholder {{courseid}} can be used.' .
+        '<p><strong>Important:</strong>For this to work, Opencast workflows must be restricted to roles, ' .
+        'and the Opencast admin user defined in tool_opencast must not have write access to the default ' .
+        'admin role in Opencast (default name: ROLE_ADMIN)</p>';
 $string['series'] = 'Series';

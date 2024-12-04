@@ -62,7 +62,9 @@ However, it may work under other system requirements and versions as well.
 This plugin loads video metadata from [Opencast](https://opencast.org/) to be released as OER resource (Open Educational Resources).
 It uses block_opencast to get the series attached to Moodle courses and the API from tool_opencast to load the video metadata.
 
-When a video is set to OER it also stores changes in metadata back to the video (license).
+When a video is set to OER it also stores changes in metadata back to the video (license). 
+The access rules for the Opencast video are changed, so that it is not possible to easily delete a video.
+Information is added to the `block_opencast` view that a video has been released and how to delete it.
 
 ### On OER release
 
@@ -88,7 +90,7 @@ See description of main plugin [local_oer](https://github.com/llttugraz/moodle-l
 
 ## API Documentation
 
-No API.
+Uses the API of `tool_opencast` to communicate with Opencast instances.
 
 ## Subplugins
 
@@ -100,7 +102,6 @@ No personal data are stored.
 
 ## Known Issues
 
-* Deleting of videos cannot be prevented yet.
 * Support for multiple Opencast instances, connected to one Moodle instance, has to been implemented yet.
 * Unit tests for `class module` have not been implemented yet.
 
