@@ -37,9 +37,9 @@ $string['origin'] = 'Opencast';
 $string['pluginname'] = 'OER Subplugin zum Laden von Opencast Videos';
 $string['presenter'] = 'Präsentator:in';
 $string['privacy:metadata'] = 'Dieses Plugin speichert keine Daten';
-$string['releasedvideo'] = 'Dieses Video wurde als Open Educational Resource (OER) veröffentlicht.<br>' .
-        'Auf dieser Oberfläche ist es nicht mehr möglich die Metadaten des Videos zu editieren, oder das Video zu löschen.<br>' .
-        'Um das Video zu löschen, wenden Sie sich bitte an den Support.';
+$string['releasedvideo'] = '<p>Dieses Video wurde als <strong>Open Educational Resource (OER)</strong> veröffentlicht.</p>' .
+        '<p>Auf dieser Oberfläche ist es nicht mehr möglich die Metadaten des Videos zu editieren, oder das Video zu löschen.<br>' .
+        'Um das Video zu löschen, wenden Sie sich bitte an den Support.</p>';
 $string['rightsholder'] = 'Rechteinhaber:in';
 $string['rolestoremovewrite'] = 'Rollen, von denen Schreibrechte entfernt werden';
 $string['rolestoremovewrite_description'] = 'Opencast-Rollen, bei denen die Schreibrechte ' .
