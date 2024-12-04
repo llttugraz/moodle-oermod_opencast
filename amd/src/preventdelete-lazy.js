@@ -22,6 +22,7 @@
  */
 
 import * as Templates from "core/templates";
+import * as Str from "core/str";
 
 /**
  * Replace the edit and delete icon of already releaased OER videos with an information.
@@ -32,18 +33,43 @@ import * as Templates from "core/templates";
 export const init = async (released) => {
     const series = released.series;
     const videos = released.videos;
+    const action = await Str.get_string('haction', 'block_opencast');
+    const visibility = await Str.get_string('hvisibility', 'block_opencast');
+    let foundaction = -1;
+    let foundvisibility = -1;
 
     for (const key in series) {
-        let table = document.getElementById('opencast-videos-table-' + series[key]);
+        const table = document.getElementById('opencast-videos-table-' + series[key]);
+        if (!table) {
+            return;
+        }
+        const thead = table.rows[0].cells;
+        for (let i = 0; i < thead.length; i++) {
+            if (thead[i].innerHTML.includes(action + '<div class="commands"></div>')) {
+                foundaction = i;
+            }
+            window.console.log(thead[i].innerHTML);
+            if (thead[i].innerHTML.includes(visibility)) {
+                foundvisibility = i;
+            }
+        }
+        window.console.log(foundvisibility, foundaction);
+        if (foundaction === -1 && foundvisibility === -1) {
+            return; // Nothing to do here.
+        }
         for (let i = 0; i < table.tBodies[0].rows.length; i++) {
-            let cell = document.getElementById('opencast-videos-table-' + series[key] + '_r' + i + '_c6');
-            let visibility = document.getElementById('opencast-videos-table-' + series[key] + '_r' + i + '_c5');
-            let content = cell.innerHTML;
+            const cell = document.getElementById('opencast-videos-table-' + series[key]
+                + '_r' + i + '_c' + foundaction.toString());
+            const visibility = document.getElementById('opencast-videos-table-' + series[key]
+                + '_r' + i + '_c' + foundvisibility.toString());
+            const content = cell.innerHTML;
             for (const key in videos) {
-                if (content.includes(videos[key].videoid)) {
-                    visibility.innerHTML = '-';
+                if (content.includes(videos[key].videoid) && foundaction > -1) {
                     const {html,} = await Templates.renderForPromise('oermod_opencast/info', {});
                     cell.innerHTML = html;
+                }
+                if (content.includes(videos[key].videoid) && foundvisibility > -1) {
+                    visibility.innerHTML = '-';
                 }
             }
         }
