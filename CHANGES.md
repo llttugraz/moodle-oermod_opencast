@@ -1,3 +1,7 @@
+### v1.0.3 - 2024-12-04
+- release now removes write access to video files in opencast to prevent deletion
+- modifies block_opencast overview to show OER hint instead of update/delete button for released videos
+
 ### v1.0.2 - 2024-11-14
 - Update for compatibility with Moodle 4.5
 - Enhance README.md
