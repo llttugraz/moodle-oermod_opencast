@@ -19,20 +19,16 @@
  *
  * @package    oermod_opencast
  * @author     Christian Ortner <christian.ortner@tugraz.at>
- * @copyright  2023 Educational Technologies, Graz, University of Technology
+ * @copyright  2024 Educational Technologies, Graz, University of Technology
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->version = 2024120500;
-$plugin->requires = 2022112806;
-$plugin->component = 'oermod_opencast';
-$plugin->release = 'v1.0.3';
-$plugin->maturity = MATURITY_STABLE;
-$plugin->dependencies = [
-        'local_oer' => 2023111701, // Older versions do not have mod subplugin support.
-        'tool_opencast' => 2023112200, // Needed for API access.
-        'block_opencast' => 2023112200, // Needed for series id.
+$callbacks = [
+        [
+                'hook' => core\hook\output\before_footer_html_generation::class,
+                'callback' => [\oermod_opencast\hook_callbacks::class, 'inject_javascript_to_block_opencast'],
+                'priority' => 100,
+        ],
 ];
-$plugin->supported = [401, 405];
