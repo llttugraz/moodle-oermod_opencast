@@ -49,8 +49,8 @@ with the third option there are also the git functions available.
 
 ## Requirements
 
-- Supported Moodle Version: 4.1 - 4.5
-- Supported PHP Version:    7.4 - 8.3
+- Supported Moodle Version: 4.5
+- Supported PHP Version:    8.1 - 8.3
 - Supported Databases:      MariaDB, PostgreSQL
 - Supported Moodle Themes:  Boost
 
@@ -65,6 +65,13 @@ It uses block_opencast to get the series attached to Moodle courses and the API 
 When a video is set to OER it also stores changes in metadata back to the video (license). 
 The access rules for the Opencast video are changed, so that it is not possible to easily delete a video.
 Information is added to the `block_opencast` view that a video has been released and how to delete it.
+
+(since v1.0.4)
+A scheduled task checks if ACL of videos is still set (added ROLE_ANONYMOUS and remove write capabilities of defined roles).block_opencast
+
+The plugin also injects some JavaScript to block_opencast. The injected JavaScript removes the controls of OER published videos and adds a hint how
+a teacher can delete them.
+A second script adds additional parameters to the Opencast Studio record button. Courseid and ACL settings are also transmitted.
 
 ### On OER release
 

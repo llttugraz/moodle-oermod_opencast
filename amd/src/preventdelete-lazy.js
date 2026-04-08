@@ -30,7 +30,7 @@ import * as Str from "core/str";
  * @param {{series: id, videos: {videoid, title}}}released
  * @returns {Promise<void>}
  */
-export const init = async (released) => {
+export const init = async (released) => { // eslint-disable-line space-before-function-paren
     const series = released.series;
     const videos = released.videos;
     const action = await Str.get_string('haction', 'block_opencast');
@@ -48,12 +48,10 @@ export const init = async (released) => {
             if (thead[i].innerHTML.includes(action + '<div class="commands"></div>')) {
                 foundaction = i;
             }
-            window.console.log(thead[i].innerHTML);
             if (thead[i].innerHTML.includes(visibility)) {
                 foundvisibility = i;
             }
         }
-        window.console.log(foundvisibility, foundaction);
         if (foundaction === -1 && foundvisibility === -1) {
             return; // Nothing to do here.
         }
@@ -62,6 +60,8 @@ export const init = async (released) => {
                 + '_r' + i + '_c' + foundaction.toString());
             const visibility = document.getElementById('opencast-videos-table-' + series[key]
                 + '_r' + i + '_c' + foundvisibility.toString());
+            const checkbox = document.getElementById('opencast-videos-table-' + series[key]
+                + '_r' + i + '_c0');
             const content = cell.innerHTML;
             for (const key in videos) {
                 if (content.includes(videos[key].videoid) && foundaction > -1) {
@@ -70,6 +70,10 @@ export const init = async (released) => {
                 }
                 if (content.includes(videos[key].videoid) && foundvisibility > -1) {
                     visibility.innerHTML = '-';
+                }
+                if (content.includes(videos[key].videoid)) {
+                    // Just remove the whole checkbox, so the select all cannot reach it anymore.
+                    checkbox.innerHTML = '';
                 }
             }
         }
