@@ -43,6 +43,7 @@ $string['message:wronglicencevideos_body'] = 'These videos does not have a cc li
 $string['messageprovider:missingvideos'] = 'Notification when videos are missing on Opencast';
 $string['notify_on_error'] = 'Email to notify on errors';
 $string['notify_on_error_description'] = 'A task checks whether the videos on Opencast are still set to public and whether the roles that are not supposed to have write access (oermod_opencast|rolestoremovewrite setting) have been configured correctly. If anything is incorrect, an email is sent to the specified address. The email is also sent to the main administrator and users with the capability (oermod/opencast:missingvideos).';
+$string['opencast:missingvideos'] = 'Receive notifications about missing or misconfigured released Opencast videos';
 $string['origin'] = 'Opencast';
 $string['pluginname'] = 'OER subplugin for loading opencast videos';
 $string['presenter'] = 'Presenter';
