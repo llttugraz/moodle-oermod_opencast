@@ -43,6 +43,7 @@ $string['message:wronglicencevideos_body'] = 'Diese Videos stehen nicht unter ei
 $string['messageprovider:missingvideos'] = 'Benachrichtigung wenn Videos auf Opencast fehlen.';
 $string['notify_on_error'] = 'E-Mail zur Benachrichtigung bei Fehlern';
 $string['notify_on_error_description'] = 'Eine geplante Aufgabe überprüft, ob die Videos auf Opencast weiterhin als öffentlich eingestellt sind und ob die Rollen, die keinen Schreibzugriff haben sollen (Einstellung „oermod_opencast|rolestoremovewrite“), korrekt konfiguriert wurden. Sollte etwas nicht korrekt sein, wird eine E-Mail an die angegebene Adresse gesendet. Die E-Mail wird außerdem an den Hauptadministrator und an Benutzer mit der Berechtigung „oermod/opencast:missingvideos“ gesendet.';
+$string['opencast:missingvideos'] = 'Benachrichtigungen über fehlende oder falsch konfigurierte veröffentlichte Opencast Videos erhalten';
 $string['origin'] = 'Opencast';
 $string['pluginname'] = 'OER Subplugin zum Laden von Opencast Videos';
 $string['presenter'] = 'Präsentator:in';

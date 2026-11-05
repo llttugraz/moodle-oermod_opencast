@@ -132,15 +132,16 @@ class module implements \local_oer\modules\module {
                 $element->get_source()
             );
 
-            $durations = [];
-            // As the different formats can have a different duration, collect them all and take the longest.
+            $milliseconds = 0;
+            // As the different formats can have a different duration, take the longest.
+            // Skip non-numeric values.
             foreach ($video->publications as $publication) {
                 foreach ($publication->media as $media) {
-                    $durations[$media->duration] = isset($durations[$media->duration]) ? $durations[$media->duration]++ : 0;
+                    if (isset($media->duration) && is_numeric($media->duration)) {
+                        $milliseconds = max($milliseconds, (int) $media->duration);
+                    }
                 }
             }
-            $milliseconds = empty($durations) ? [0 => 0] : array_keys($durations, max($durations));
-            $milliseconds = reset($milliseconds);
             $duration = $milliseconds / 1000;
             $minutes = floor($duration / 60);
             $seconds = (int) $duration % 60;
